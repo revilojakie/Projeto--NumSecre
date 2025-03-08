@@ -1,4 +1,3 @@
-//O principal objetivo deste desafio é fortalecer suas habilidades em lógica de programação. Aqui você deverá desenvolver a lógica para resolver o problema.
 let listaAmigos = [];
 
 function adicionarAmigo() {
@@ -14,15 +13,35 @@ function adicionarAmigo() {
     input.value = "";
     atualizarLista();
 }
-console.log(listaAmigos);
+
 function atualizarLista() {
     const ul = document.getElementById("listaAmigos");
     ul.innerHTML = "";
-    listaAmigos.forEach(nome => {
+    listaAmigos.forEach((nome, index) => {
         const li = document.createElement("li");
         li.textContent = nome;
+        li.style.opacity = "0"; // Começa invisível
+        li.style.transition = "opacity 0.5s ease-in-out";
+
+        // Botão de remover
+        const btnRemover = document.createElement("button");
+        btnRemover.textContent = "❌";
+        btnRemover.style.marginLeft = "10px";
+        btnRemover.style.cursor = "pointer";
+        btnRemover.onclick = () => removerAmigo(index);
+        
+        li.appendChild(btnRemover);
         ul.appendChild(li);
+
+        setTimeout(() => {
+            li.style.opacity = "1"; // Aparece suavemente
+        }, 100);
     });
+}
+
+function removerAmigo(index) {
+    listaAmigos.splice(index, 1);
+    atualizarLista();
 }
 
 function sortearAmigo() {
@@ -31,10 +50,15 @@ function sortearAmigo() {
         return;
     }
     
-    const indiceSorteado = Math.floor(Math.random() * listaAmigos.length);
-    const amigoSorteado = listaAmigos[indiceSorteado];
-    
     const resultado = document.getElementById("resultado");
-    resultado.innerHTML = `<li>Esse é o seu amigo secreto: <strong>${amigoSorteado}</strong></li>`;
-    console.log(amigoSorteado);
+    resultado.innerHTML = "Sorteando...";
+    resultado.style.color = "#ff8800";
+    resultado.style.fontSize = "20px";
+    resultado.style.transition = "all 0.5s ease-in-out";
+
+    setTimeout(() => {
+        const indiceSorteado = Math.floor(Math.random() * listaAmigos.length);
+        const amigoSorteado = listaAmigos[indiceSorteado];
+        resultado.innerHTML = `<li style="color: green; font-size: 24px; font-weight: bold;">Esse é o seu amigo secreto: <strong>${amigoSorteado}</strong></li>`;
+    }, 1500); // Pequeno atraso para criar suspense
 }
